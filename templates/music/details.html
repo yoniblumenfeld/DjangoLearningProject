@@ -1,0 +1,62 @@
+{% extends 'music/base.html' %}
+{% load music_extra static %}
+
+{% block title %}Details{% endblock %}
+
+{% block body %}
+
+    <h1>Album {{ specific_album.album_title }} by {{ specific_album.artist }}</h1>
+    <table>
+        <tr>
+            {% for field in specific_album_matrix %}
+            <th>{{ field.0|upper|replaceChar:"_"}}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for value in specific_album_matrix %}
+            <td>{{ value.1 }}</td>
+            {% endfor %}
+
+        </tr>
+    </table>
+
+    {% if specific_album.album_logo.url != "nologo" %}
+        <img src="{{ specific_album.album_logo.url }}">
+    {% endif %}
+
+
+    {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    {% if specific_album.song_set.count > 0 %}
+
+    <form action="{% url 'music:favorite' specific_album.id %}" method="post">
+        {% csrf_token %}
+        {% for song in specific_album.song_set.all %}
+            <input type="radio" id="song{{ forloop.counter }}" name="song" value="{{ song.id }}">
+            <label for="song{{ forloop.counter }}">
+            {{ song.song_title }}
+            {% if song.is_favorite %}
+                <img width="15" height="15" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrfFtE9Yctq7NTDUYnhb6e2SKljDFkXQuLKMp56vVDDLkf1As">
+            {% endif %}
+            </label><br>
+        {% endfor %}
+        <br>
+        <input type="submit" value="Favorite" id="sumbit_btn">
+    </form>
+    {% endif %}
+
+    <form action="{% url 'music:album-delete' specific_album.id %}" method="post">
+        {% csrf_token %}
+
+        <button type="submit" id="delete_btn">Delete</button>
+    </form>
+
+    <form action="{% url 'music:album-update' specific_album.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" value="{{ specific_album.id }}">
+        <button type="submit" id="update_btn">Update</button>
+    </form>
+
+{% endblock %}

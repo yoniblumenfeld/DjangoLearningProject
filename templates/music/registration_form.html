@@ -1,0 +1,23 @@
+{% extends 'music/base.html' %}
+{% load music_extra static %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <h1>Create New Account</h1>
+    {% if error_message %}
+        {% for error in error_message %}
+                    <p><strong>{{ error_message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% include 'music/from_template.html' %}
+        <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success" >Submit</button>
+        </div>
+    </div>
+    </form>
+
+{% endblock %}

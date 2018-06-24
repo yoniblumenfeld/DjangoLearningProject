@@ -1,0 +1,18 @@
+{% extends 'music/base.html' %}
+{% load music_extra static %}
+
+{% block title %}Index{% endblock %}
+{% block body %}
+    <h1>Albums Index</h1>
+    {% if all_albums %}
+
+        <ul>
+            {% for album in all_albums %}
+            <li><a href="{% url 'music:detail' album.id %}">{{ album.album_title }}</a></li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <h2>No albums exist!</h2>
+    {% endif %}
+{% endblock %}

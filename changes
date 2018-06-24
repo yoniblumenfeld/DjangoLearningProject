@@ -1,0 +1,29 @@
+changes made in opposing to buck's tutorial:
+whats between """ """ is the code that has been added
+
+1. added this code to the settings file beacuse authenticate always returned none!
+"""
+#Authentication backends
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+"""
+
+2. the way to properly make a user (need to validate):
+"""
+from django.contrib.auth.models import User
+
+password="examplepass"
+user = User.objects.create(username="example",email="example@mail.com",password=password)
+
+#set password as hash in database (no other way, has to be done)
+user.set_password("examplepass")
+#save user in db
+user.save()
+
+#validating the user
+from django.contrib.auth import authenticate,login
+
+#if password wont be saved right there will be problems here!
+user = authenticate(username=user.username,password=password)
+"""
